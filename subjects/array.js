@@ -1,7 +1,7 @@
 //@ts-check
 
-// let daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-// //console.log(daysOfWeek.length)
+let daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+console.log(daysOfWeek.length)
 
 // for (day in daysOfWeek) {
 // //    console.log(daysOfWeek[day])
