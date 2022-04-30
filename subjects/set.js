@@ -69,7 +69,7 @@ class Set {
         return unionSet
     }
 
-    intersection(otherSet) {
+    intersectionLegacy(otherSet) {
         const intersectionSet = new Set()
         const values = this.values()
 
@@ -81,21 +81,56 @@ class Set {
         return intersectionSet
     }
 
+    // This way we are using less processing, because we have a contidional that check wich is the smaller set
+    intersection(otherSet) {
+        const intersectionSet = new Set()
+        const values = this.values()
+        const otherValues = otherSet.values()
+        let biggerSet = values
+        let smallerSet = otherValues
+
+        if (otherValues.length - values.length > 0) {
+            biggerSet = otherValues
+            smallerSet = values
+        }
+
+        smallerSet.forEach(value => {
+            if (biggerSet.includes(value)) {
+                intersectionSet.add(value)
+            }
+        })
+
+        return intersectionSet
+    }
+
+    difference(otherSet) {
+        const differenceSet = new Set()
+
+        this.values().forEach(value => {
+            if (!otherSet.has(value)) {
+                differenceSet.add(value)
+            }
+        })
+
+        return differenceSet
+    }
+
+    isSubsetOf(otherSet) {
+        if (this.size() > otherSet.size()) {
+            return false
+        }
+
+        let isSubset = true
+        this.values().every(value => {
+            if (!otherSet.has(value))
+            isSubset = false
+            return false
+        })
+
+        return isSubset
+    }
+
 }
-
-// TESTING CLASS SET OPERATIONS - INTERSECTION
-const setA = new Set()
-setA.add(1)
-setA.add(2)
-setA.add(3)
-
-const setB = new Set()
-setB.add(2)
-setB.add(3)
-setB.add(4)
-
-const intersectionAB = setA.intersection(setB)
-console.log(intersectionAB.values())
 
 // TESTING FIRST CLASS SET METHODS 
 // const set = new Set()
@@ -119,6 +154,7 @@ console.log(intersectionAB.values())
 // console.log(`Object size -> ${set.size()}`)
 
 
+
 // TESTING CLASS SET OPERATIONS - UNION
 // const setA = new Set()
 // setA.add(1)
@@ -139,3 +175,38 @@ console.log(intersectionAB.values())
 // const unionAB = setA.union(setB)
 // console.log(unionAB.values())
 
+
+
+// TESTING CLASS SET OPERATIONS - INTERSECTION / DIFFERENCE
+// const setA = new Set()
+// setA.add(1)
+// setA.add(2)
+// setA.add(3)
+
+// const setB = new Set()
+// setB.add(2)
+// setB.add(3)
+// setB.add(4)
+
+//const intersectionAB = setA.intersection(setB)
+// console.log(intersectionAB.values())
+
+
+
+// TESTING CLASS SET OPERATIONS - SUB SET
+const setA = new Set()
+setA.add(1)
+setA.add(2)
+
+const setB = new Set()
+setB.add(1)
+setB.add(2)
+setB.add(3)
+
+const setC = new Set()
+setC.add(2)
+setC.add(3)
+setC.add(4)
+
+console.log(setA.isSubsetOf(setB))
+console.log(setA.isSubsetOf(setC))
