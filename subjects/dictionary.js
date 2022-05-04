@@ -1,4 +1,4 @@
-import { defaulToString } from '../util'
+import { defaulToString } from '../util.js'
 
 class ValuePair {
     constructor(key, value) {
@@ -122,6 +122,12 @@ export default class Dictionary {
 
         return objString
     }
-
-
 }
+
+const dictionary = new Dictionary()
+dictionary.set('Louran', 'louran@mail.com')
+dictionary.set('Mariana', 'mariana@mail.com')
+dictionary.set('Frida', 'frida@mail.com')
+
+console.log(dictionary.hasKey('Louran'))
+console.log(dictionary.size())
