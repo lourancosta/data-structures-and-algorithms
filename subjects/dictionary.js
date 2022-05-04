@@ -52,4 +52,76 @@ export default class Dictionary {
         }
         return undefined
     }
+
+    keyValuesNew() {
+        return Object.values(this.table)
+    }
+
+    // How the method Object.values (above) maybe not be avaliable to all browsers,
+    // We can also use the following code
+    keyValues() {
+        const valuePairs = []
+        for (const k in this.table) {
+            if (this.hasKey(k)) {
+                valuePairs.push(this.table[k])
+            }
+        }
+
+        return valuePairs
+    }
+
+    keys() {
+        return this.keyValues().map(valuePair => valuePair.key)
+
+        //We cane alto use the following code
+        // const keys = [];
+        // const valuePairs = this.keyValues();
+        // for (let i = 0; i < valuePairs.length; i++) {
+        //     keys.push(valuePairs[i].key);
+        // }
+    }
+
+    values() {
+        return this.keyValues().map(valuePair => valuePair.value)
+    }
+
+    forEach(callbackFn) {
+        const valuePairs = this.keyValues()
+
+        for (let i = 0; i < valuePairs.length; i++) {
+            const result = callbackFn(valuePairs[i].key, valuePairs[i].value)
+            if (result === false) {
+                break
+            }
+        }
+    }
+
+    size() {
+        return Object.keys(this.table).length
+    }
+
+    isEmpty() {
+        return this.size() === 0
+    }
+
+    clear() {
+        this.table = {}
+    }
+
+    toString() {
+        if (this.isEmpty()) {
+            return ''
+        }
+
+        const valuePairs = this.keyValues()
+        let objString = `${valuePairs[0].toString()}`
+
+        for (let i = 1; i < valuePairs.length; i++) {
+            objString = `${objString}, ${valuePairs[i].toString()}`
+        }
+
+        return objString
+    }
+
+
 }
