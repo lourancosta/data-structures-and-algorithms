@@ -18,7 +18,7 @@ export default class Dictionary {
     }
 
     hasKey(key) {
-        return this.table[this.toStrFn(key) != null]
+        return this.table[this.toStrFn(key)] != null
     }
 
     set(key, value) {
@@ -129,5 +129,10 @@ dictionary.set('Louran', 'louran@mail.com')
 dictionary.set('Mariana', 'mariana@mail.com')
 dictionary.set('Frida', 'frida@mail.com')
 
-console.log(dictionary.hasKey('Louran'))
+console.log(dictionary.hasKey('Frida'))
 console.log(dictionary.size())
+console.log('')
+
+console.log(dictionary.keys())
+console.log(dictionary.values())
+console.log(dictionary.get('Frida'))
