@@ -1,6 +1,6 @@
 import { defaulToString } from '../util.js'
 
-class ValuePair {
+export class ValuePair {
     constructor(key, value) {
         this.key = key
         this.value = value
