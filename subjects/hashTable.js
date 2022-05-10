@@ -74,7 +74,12 @@ class HashTableSeparateChaining {
         this.hashTable = new HashTable()
     }
 
-    put(key, value) {
+    /* Aqui estamos tratando o caso de colisões nas tabelas hash com ENCADEAMENTO SEPARADO, que consiste em
+    cada item da hash table ter uma instancia de lista ligada, se por acaso algum item ter a mesma posição
+    de umque já foi incluso, o segundo item será adicionado na segunda posição da lista ligada da posição,
+    assim não sobrescrevendo o primeiro.
+    */
+    put1(key, value) {
         if (key != null && value != null) {
             const position = this.hashTable.hashCode(key)
 
@@ -89,7 +94,7 @@ class HashTableSeparateChaining {
         return false
     }
 
-    get(key) {
+    get1(key) {
         const position = this.hashTable.hashCode(key)
         const linkedList = this.table[position]
 
@@ -105,16 +110,126 @@ class HashTableSeparateChaining {
 
         return undefined
     }
+
+    remove1(key) {
+        const position = this.hashTable.hashCode(key)
+        const linkedList = this.table[position]
+
+        if (linkedList != null && !linkedList.isEmpty()) {
+            let current = linkedList.getHead()
+            while (current != null) {
+                if (current.element.key === key) {
+                    linkedList.remove(current.element)
+                    if (linkedList.isEmpty()) {
+                        delete this.table[position]
+                    }
+                    return true
+                }
+                current = current.next
+            }
+        }
+        return false
+    }
+
+    /* Aqui vamos comecar a ter uma outra abordagem, a SONDAGEM LINEAR. Ela consiste de se um novo elemento for adicionado
+    e a posição hash dele ja estiver ocupada, verificaremos o position + 1, se também a posição estiver ocupada verificaremos o
+    position + 2 e assim sucessivamente até encontramos uma posição vazia para adicionarmos o novo elemento na hashtable
+
+    Quando tivermos a necessidade de excluir um elemento, moveremos os elementos que estão após o item excluido, assim o
+    position deles será um para trás. Desta forma manteremos a efiencia da tabela hash, não a fazendo pesquisar em posições
+    vazias.
+    */
+    put(key, value) {
+        if (key != null && value != null) {
+            const position = this.hashTable.hashCode(key)
+            if (this.table[position] == null) {
+                this.table[position] = new ValuePair(key, value)
+            } else {
+                let index = position + 1
+                while (this.table[index] != null) {
+                    index++
+                }
+                this.table[index] = new ValuePair(key, value)
+            }
+            return true
+        }
+        return false
+    }
+
+    get(key) {
+        const position = this.hashTable.hashCode(key)
+        if (this.table[position] != null) {
+            if (this.table[position].key === key) {
+                return this.table[position].value
+            }
+
+            let index = position + 1
+            while (this.table[index] != null && this.table[index].key !== key){
+                index++
+            }
+
+            if (this.table[index] != null && this.table[index].key === key) {
+                return this.table[position].value
+            }
+        }
+
+        return undefined
+    }
+
+    remove(key) {
+        const position = this.hashTable.hashCode(key)
+        if (this.table[position] != null) {
+            if (this.table[position].key === key) {
+                delete this.table[position]
+                this.verifyRemoveSideEffect(key, position)
+                return true
+            }
+
+            let index = position + 1
+            while (this.table[index] != null && this.table[index.key] === key) {
+                delete this.table[index]
+                this.verifyRemoveSideEffect(key, index)
+                return true
+            }
+        }
+
+        return false
+    }
+
+    verifyRemoveSideEffect(key, removedPosition) {
+        const hash = this.hashTable.hashCode(key)
+        let index = removedPosition + 1
+        while (this.table[index] != null) {
+            const posHash = this.hashTable.hashCode(this.table[index].key)
+
+            if (posHash <= hash || posHash <= removedPosition) {
+                this.table[removedPosition] = this.table[index]
+                delete this.table[index]
+                removedPosition = index
+            }
+
+            index++
+        }
+    }
 }
 
-const hashVah = new HashTableSeparateChaining()
-hashVah.put('Louran', 'louran@mail.com')
-hashVah.put('Mariana', 'mariana@mail.com')
-hashVah.put('Frida', 'frida@mail.com')
-hashVah.put('Maria', 'maria1@mail.com')
-hashVah.put('Maria', 'maria2@mail.com')
 
-console.log(hashVah.get('Maria'))
+
+// ######################################################################
+// TESTS
+
+const hashVah = new HashTableSeparateChaining()
+// hashVah.put('Louran', 'louran@mail.com')
+// hashVah.put('Mariana', 'mariana@mail.com')
+// hashVah.put('Frida', 'frida@mail.com')
+// hashVah.put('Maria', 'maria1@mail.com')
+// hashVah.put('Maria', 'maria2@mail.com')
+// console.log(hashVah)
+// console.log('')
+
+// hashVah.remove('Maria')
+// console.log(hashVah.get('Maria'))
+// console.log(hashVah)
 
 
 
@@ -141,17 +256,21 @@ const hash = new HashTable()
 
 
 
-hash.put('Ygritte', 'ygritte@email.com');
-hash.put('Jonathan', 'jonathan@email.com');
-hash.put('Jamie', 'jamie@email.com');
-hash.put('Jack', 'jack@email.com');
-hash.put('Jasmine', 'jasmine@email.com');
-hash.put('Jake', 'jake@email.com');
-hash.put('Nathan', 'nathan@email.com');
-hash.put('Athelstan', 'athelstan@email.com');
-hash.put('Sue', 'sue@email.com');
-hash.put('Aethelwulf', 'aethelwulf@email.com');
-hash.put('Sargeras', 'sargeras@email.com');
+hashVah.put('Ygritte', 'ygritte@email.com');
+hashVah.put('Jonathan', 'jonathan@email.com');
+hashVah.put('Jamie', 'jamie@email.com');
+hashVah.put('Jack', 'jack@email.com');
+hashVah.put('Jasmine', 'jasmine@email.com');
+hashVah.put('Jake', 'jake@email.com');
+hashVah.put('Nathan', 'nathan@email.com');
+hashVah.put('Athelstan', 'athelstan@email.com');
+hashVah.put('Sue', 'sue@email.com');
+hashVah.put('Aethelwulf', 'aethelwulf@email.com');
+hashVah.put('Sargeras', 'sargeras@email.com');
+console.log(hashVah)
+
+hashVah.remove('Jonathan')
+console.log(hashVah)
 
 // console.log(hash.hashCode('Ygritte') + ' - Ygritte')
 // console.log(hash.hashCode('Jonathan') + ' - Jonathan')
