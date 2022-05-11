@@ -74,6 +74,23 @@ class HashTableSeparateChaining {
         this.hashTable = new HashTable()
     }
 
+    // Funcao hash com melhor desempenho do que a loseloseHashCode
+    djb2HashCode(key) {
+        const tableKey = this.toStrFn(key)
+        let hash = 5381
+
+        for (let i = 0; i < tableKey.length; i++) {
+            hash = (hash * 33) + tableKey.charCodeAt(i)
+        }
+
+        return hash % 1013
+    }
+
+
+    hashCode(key) {
+        return this.djb2HashCode(key)
+    }
+
     /* Aqui estamos tratando o caso de colisões nas tabelas hash com ENCADEAMENTO SEPARADO, que consiste em
     cada item da hash table ter uma instancia de lista ligada, se por acaso algum item ter a mesma posição
     de umque já foi incluso, o segundo item será adicionado na segunda posição da lista ligada da posição,
@@ -81,7 +98,7 @@ class HashTableSeparateChaining {
     */
     put1(key, value) {
         if (key != null && value != null) {
-            const position = this.hashTable.hashCode(key)
+            const position = this.hashCode(key)
 
             if (this.table[position] == null) {
                 this.table[position] = new LinkedList()
@@ -95,7 +112,7 @@ class HashTableSeparateChaining {
     }
 
     get1(key) {
-        const position = this.hashTable.hashCode(key)
+        const position = this.hashCode(key)
         const linkedList = this.table[position]
 
         if (linkedList != null && !linkedList.isEmpty()) {
@@ -112,7 +129,7 @@ class HashTableSeparateChaining {
     }
 
     remove1(key) {
-        const position = this.hashTable.hashCode(key)
+        const position = this.hashCode(key)
         const linkedList = this.table[position]
 
         if (linkedList != null && !linkedList.isEmpty()) {
@@ -141,7 +158,7 @@ class HashTableSeparateChaining {
     */
     put(key, value) {
         if (key != null && value != null) {
-            const position = this.hashTable.hashCode(key)
+            const position = this.hashCode(key)
             if (this.table[position] == null) {
                 this.table[position] = new ValuePair(key, value)
             } else {
@@ -157,7 +174,7 @@ class HashTableSeparateChaining {
     }
 
     get(key) {
-        const position = this.hashTable.hashCode(key)
+        const position = this.hashCode(key)
         if (this.table[position] != null) {
             if (this.table[position].key === key) {
                 return this.table[position].value
@@ -177,7 +194,7 @@ class HashTableSeparateChaining {
     }
 
     remove(key) {
-        const position = this.hashTable.hashCode(key)
+        const position = this.hashCode(key)
         if (this.table[position] != null) {
             if (this.table[position].key === key) {
                 delete this.table[position]
@@ -197,10 +214,10 @@ class HashTableSeparateChaining {
     }
 
     verifyRemoveSideEffect(key, removedPosition) {
-        const hash = this.hashTable.hashCode(key)
+        const hash = this.hashCode(key)
         let index = removedPosition + 1
         while (this.table[index] != null) {
-            const posHash = this.hashTable.hashCode(this.table[index].key)
+            const posHash = this.hashCode(this.table[index].key)
 
             if (posHash <= hash || posHash <= removedPosition) {
                 this.table[removedPosition] = this.table[index]
@@ -215,8 +232,10 @@ class HashTableSeparateChaining {
 
 
 
+
+
 // ######################################################################
-// TESTS
+// TESTS com classe desenvolvida durante leitura
 
 const hashVah = new HashTableSeparateChaining()
 // hashVah.put('Louran', 'louran@mail.com')
@@ -256,21 +275,23 @@ const hash = new HashTable()
 
 
 
-hashVah.put('Ygritte', 'ygritte@email.com');
-hashVah.put('Jonathan', 'jonathan@email.com');
-hashVah.put('Jamie', 'jamie@email.com');
-hashVah.put('Jack', 'jack@email.com');
-hashVah.put('Jasmine', 'jasmine@email.com');
-hashVah.put('Jake', 'jake@email.com');
-hashVah.put('Nathan', 'nathan@email.com');
-hashVah.put('Athelstan', 'athelstan@email.com');
-hashVah.put('Sue', 'sue@email.com');
-hashVah.put('Aethelwulf', 'aethelwulf@email.com');
-hashVah.put('Sargeras', 'sargeras@email.com');
-console.log(hashVah)
+// hashVah.put('Ygritte', 'ygritte@email.com');
+// hashVah.put('Jonathan', 'jonathan@email.com');
+// hashVah.put('Jamie', 'jamie@email.com');
+// hashVah.put('Jack', 'jack@email.com');
+// hashVah.put('Jasmine', 'jasmine@email.com');
+// hashVah.put('Jake', 'jake@email.com');
+// hashVah.put('Nathan', 'nathan@email.com');
+// hashVah.put('Athelstan', 'athelstan@email.com');
+// hashVah.put('Sue', 'sue@email.com');
+// hashVah.put('Aethelwulf', 'aethelwulf@email.com');
+// hashVah.put('Sargeras', 'sargeras@email.com');
+// console.log(hashVah)
+// hashVah.remove('Jonathan')
+// console.log(hashVah)
 
-hashVah.remove('Jonathan')
-console.log(hashVah)
+
+
 
 // console.log(hash.hashCode('Ygritte') + ' - Ygritte')
 // console.log(hash.hashCode('Jonathan') + ' - Jonathan')
@@ -283,5 +304,22 @@ console.log(hashVah)
 // console.log(hash.hashCode('Sue') + ' - Sue')
 // console.log(hash.hashCode('Aethelwulf') + ' - Aethelwulf')
 // console.log(hash.hashCode('Sargeras') + ' - Sargeras')
-
 //console.log(hash.toString())
+
+// ######################################################################
+
+// Usando classe Map padrao do JavaScript
+
+const map = new Map()
+console.log(map)
+
+map.set('Louran', 'louran@email.com')
+map.set('Mariana', 'mariana@email.com')
+map.set('Frida', 'frida@email.com')
+console.log(map)
+
+console.log(map.has('Frida'))
+console.log(map.size)
+console.log(map.keys())
+console.log(map.values())
+console.log(map.get('Louran'))
