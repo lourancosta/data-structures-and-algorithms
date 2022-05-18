@@ -73,12 +73,4 @@ myQueue.enqueue('Louran')
 myQueue.dequeue()
 myQueue.dequeue()
 
-
-
-
-
-
-
-
-
 console.log('\n')
