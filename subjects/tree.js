@@ -38,15 +38,56 @@ export default class BinarySearchTree {
             }
         }
     }
-}
 
+
+    // FORMAS DE PERCORRER ARVORES
+    // IN-ORDER
+    inOrderTraverse(callback) {
+        this.inOrderTraverseNode(this.root, callback)
+    }
+
+    inOrderTraverseNode(node, callback) {
+        if (node != null) {
+            this.inOrderTraverseNode(node.left, callback)
+            callback(node.key)
+            this.inOrderTraverseNode(node.right, callback)
+        }
+    }
+
+
+    // PRE-ORDER
+    preOrderTraverse(callback) {
+        this.preOrderTraverseNode(this.root, callback)
+    }
+
+    preOrderTraverseNode(node, callback) {
+        if (node != null) {
+            callback(node.key)
+            this.preOrderTraverseNode(node.left, callback)
+            this.preOrderTraverseNode(node.right, callback)
+        }
+    }
+
+
+    // POS-ORDER
+    postOrderTraverse(callback) {
+        this.postOrderTraverseNode(this.root, callback)
+    }
+
+    postOrderTraverseNode(node, callback) {
+        if (node != null) {
+            this.postOrderTraverseNode(node.left, callback)
+            this.postOrderTraverseNode(node.right, callback)
+            callback(node.key)
+        }
+    }
+    
+}
 
 
 // Testing the tree class
 const tree = new BinarySearchTree()
 tree.insert(11)
-console.log(tree)
-
 tree.insert(7)
 tree.insert(15)
 tree.insert(5)
@@ -61,6 +102,8 @@ tree.insert(20)
 tree.insert(18)
 tree.insert(25)
 tree.insert(6)
-console.log(tree)
 
 
+// TESTAR NO NAEVGAODR PARA VER AS PILHAS
+const printNode = (value) => console.log(value)
+tree.postOrderTraverse(printNode)
