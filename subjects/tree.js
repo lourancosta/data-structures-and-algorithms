@@ -132,8 +132,12 @@ export default class BinarySearchTree {
             return true
         }
     }
-
     
+    removeNode(node, key) {
+        if (node == null) {
+            return null
+        }
+    }
 }
 
 
