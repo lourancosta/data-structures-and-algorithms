@@ -6,6 +6,8 @@ export class Node {
     }
 }
 
+
+
 // BINARY SEARCH TREE
 import { Compare, defaultCompare } from '../util.js'
 
@@ -38,6 +40,7 @@ export default class BinarySearchTree {
             }
         }
     }
+
 
 
     // FORMAS DE PERCORRER ARVORES
@@ -81,6 +84,55 @@ export default class BinarySearchTree {
             callback(node.key)
         }
     }
+
+
+
+    // FORMAS DE PERCORRER ARVORES -> Valor MIN, MAX e ESPECIFICO
+    // Pesquisando valor minimo
+    min() {
+        return this.minNode(this.root)
+    }
+
+    minNode(node) {
+        let current = node
+        while (current != null && current.left != null) {
+            current = current.left
+        }
+        return current
+    }
+
+    // Pesquisando valor máximo
+    max() {
+        return this.maxNode(this.root)
+    }
+
+    maxNode(node) {
+        let current = node
+        while (current != null && current.right != null) {
+            current = current.right
+        }
+        return current
+    }
+
+    // Pesquisando valor específico
+    search(key) {
+        return this.seachNode(this.root, key)
+    }
+
+    seachNode(node, key) {
+        if (node == null) {
+            return false
+        }
+
+        if (this.compareFn(key, node.key) === Compare.LESS_THAN) {
+            return this.seachNode(node.left, key)
+        } else if (this.compareFn(key, node.key) === Compare.BIGGER_THAN) {
+            return this.seachNode(node.right, key)
+        } else {
+            return true
+        }
+    }
+
     
 }
 
@@ -104,6 +156,5 @@ tree.insert(25)
 tree.insert(6)
 
 
-// TESTAR NO NAEVGAODR PARA VER AS PILHAS
-const printNode = (value) => console.log(value)
-tree.postOrderTraverse(printNode)
+console.log(tree.search(1) ? 'Key 1 found' : 'Key 1 not found')
+console.log(tree.search(8) ? 'Key 8 found' : 'Key 8 not found')
