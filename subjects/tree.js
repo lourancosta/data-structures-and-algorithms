@@ -133,9 +133,46 @@ export default class BinarySearchTree {
         }
     }
     
+
+
+    // REMOVENDO UM NÓ
+    remove(key) {
+        this.root = this.removeNode(this.root, key)
+    }
+
     removeNode(node, key) {
         if (node == null) {
             return null
+        }
+
+        if (this.compareFn(key, node.key) === Compare.LESS_THAN) {
+            node.left = this.removeNode(node.left, key)
+            return node
+        } else if (this.compareFn(key, node.key) === Compare.BIGGER_THAN) {
+            node.right = this.removeNode(node.right, key)
+            return node
+        } else {
+            // key is equal node.item
+            // case 1
+            if (node.left == null && node.right == null) {
+                node = null
+                return node
+            }
+
+            // case 2
+            if (node.left == null) {
+                node = node.right
+                return node
+            } else if (node.right == null) {
+                node = node.left
+                return node
+            }
+
+            // case 3
+            const aux = this.minNode(node.right)
+            node.key = aux.key
+            node.right = this.removeNode(node.right, aux.key)
+            return node
         }
     }
 }
@@ -160,5 +197,51 @@ tree.insert(25)
 tree.insert(6)
 
 
-console.log(tree.search(1) ? 'Key 1 found' : 'Key 1 not found')
-console.log(tree.search(8) ? 'Key 8 found' : 'Key 8 not found')
+tree.remove(15)
+
+
+const printNode = (value) => console.log(value)
+tree.inOrderTraverse(printNode)
+
+
+
+// AVL - Mode de árvore que possui auto balanceamento, tendo como diferença máxima 1 nível entre as ramificaçoes
+class AVLTree extends BinarySearchTree {
+    constructor (compareFn = defaultCompare) {
+        super(compareFn)
+        this.compareFn = compareFn
+        this.root = null
+    }
+
+    getNodeHeight(node) {
+        if (node == null) {
+            return -1
+        }
+        return Math.max(this.getNodeHeight(node.left), this.getNodeHeight(node.right)) + 1
+    }
+
+    getBalanceFactor(node) {
+        const heightDifference = this.getNodeHeight(node.left) - this.getNodeHeight(node.right)
+
+        const BalanceFactor = {
+            UNBALANCED_RIGHT: 1,
+            SLIGHTLY_UNBALANCED_RIGHT: 2,
+            BALANCED: 3,
+            SLIGHTLY_UNBALANCED_LEFT: 4,
+            UNBALANCED_LEFT: 5
+        }
+
+        switch (heightDifference) {
+            case -2:
+                return BalanceFactor.UNBALANCED_RIGHT
+            case -1:
+                return BalanceFactor.SLIGHTLY_UNBALANCED_RIGHT
+            case 1:
+                return BalanceFactor.SLIGHTLY_UNBALANCED_LEFT
+            case 2:
+                return BalanceFactor.UNBALANCED_LEFT
+            default:
+                return BalanceFactor.BALANCED
+        }
+    }
+}
