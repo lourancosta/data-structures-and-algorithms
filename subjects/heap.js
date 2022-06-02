@@ -1,11 +1,5 @@
 import { Compare, defaultCompare } from '../util.js'
 
-function swap(array, a, b) {
-    const temp = array[a]
-    array[a] = array[b]
-    array[b] = temp
-}
-
 export class MinHeap {
     constructor(compareFn = defaultCompare) {
         this.compareFn = compareFn
@@ -24,7 +18,8 @@ export class MinHeap {
         if (index === 0) {
             return undefined
         }
-        return Math.floor((index - 1) / 2)
+        //return Math.floor((index - 1) / 2)
+        return index - 1
     }
 
     insert(value) {
@@ -38,10 +33,16 @@ export class MinHeap {
 
     siftUp(index) {
         let parent = this.getParentIndex(index)
-        while (index > 0 && this.compareFn(this.heap[parent], this.heap[index]) > Compare.BIGGER_THAN) {
+        while (index > 0 && this.compareFn(this.heap[parent], this.heap[index]) >= Compare.BIGGER_THAN) {
             swap(this.heap, parent, index)
             index = parent
             parent = this.getParentIndex(index)
+        }
+
+        function swap(array, a, b) {
+            const temp = array[a]
+            array[a] = array[b]
+            array[b] = temp
         }
     }
 
@@ -59,14 +60,26 @@ export class MinHeap {
 }
 
 const heap = new MinHeap()
-heap.insert(2)
+//heap.insert(2)
 heap.insert(3)
+<<<<<<< HEAD
 // heap.insert(4)
 // heap.insert(5)
+=======
+heap.insert(4)
+heap.insert(2)
+>>>>>>> dd5790b0c41e2afee4a9e1edfed88c62ac8db576
 heap.insert(1)
+heap.insert(7)
+heap.insert(10)
+heap.insert(6)
+heap.insert(9)
+heap.insert(8)
+heap.insert(5)
+
 
 console.log(heap)
 
-console.log('Heap size: ', heap.size())
-console.log('Heap is empty: ', heap.isEmpty())
-console.log('Heap min value: ', heap.findMinium())
+// console.log('Heap size: ', heap.size())
+// console.log('Heap is empty: ', heap.isEmpty())
+// console.log('Heap min value: ', heap.findMinium())
