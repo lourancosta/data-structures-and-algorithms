@@ -8,7 +8,7 @@ export class MinHeap {
 
     getLeftIndex(index) {
         return 2 * index + 1
-    }
+    }c
 
     getRightIndex(index) {
         return 2 * index + 2
@@ -57,6 +57,10 @@ export class MinHeap {
     findMinium() {
         return this.isEmpty() ? undefined : this.heap[0]
     }
+
+    findMaximium() {
+        return this.isEmpty() ? undefined : this.heap[this.heap.length - 1]
+    }
 }
 
 const heap = new MinHeap()
@@ -70,10 +74,14 @@ heap.insert(6)
 heap.insert(9)
 heap.insert(8)
 heap.insert(5)
+heap.insert(11)
+heap.insert(20)
+heap.insert(15)
 
 
 console.log(heap)
 
-// console.log('Heap size: ', heap.size())
-// console.log('Heap is empty: ', heap.isEmpty())
-// console.log('Heap min value: ', heap.findMinium())
+console.log('Heap size: ', heap.size())
+console.log('Heap is empty: ', heap.isEmpty())
+console.log('Heap min value: ', heap.findMinium())
+console.log('Heap max value: ', heap.findMaximium())
