@@ -76,7 +76,7 @@ heap.insert(8)
 heap.insert(5)
 heap.insert(11)
 heap.insert(20)
-heap.insert(15)
+//heap.insert(15)
 
 
 console.log(heap)
