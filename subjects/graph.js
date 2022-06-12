@@ -1,5 +1,6 @@
 import Dictionary from '../subjects/dictionary.js'
 import { Queue } from './queue.js'
+import { Stack } from "./stack.js"
 
 const Colors = {
     WHITE: 0,
@@ -45,7 +46,8 @@ export const breadthFirstSearch = (graph, startVertex, callback) => {
     }
 }
 
-// BFS melhorado, caso do problema apresentando no livro sobre a distancia (em número de arestas) de v (vertice de origem) até cada vertice u
+// BFS melhorado, caso do problema apresentando no livro sobre a distancia (em número de arestas) 
+// de v (vertice de origem) até cada vertice u
 const BFS = (graph, startVertex) => {
     const vertices = graph.getVertices()
     const adjList = graph.getAdjList()
@@ -86,8 +88,6 @@ const BFS = (graph, startVertex) => {
     }
 
 }
-
-
 
 // GRAPH CLASS
 class Graph {
@@ -160,13 +160,30 @@ graph.addEdge('B', 'E')
 graph.addEdge('B', 'F')
 graph.addEdge('E', 'I')
 
-console.log(graph)
-console.log('\n')
+// console.log(graph)
+// console.log('\n')
 // console.log(graph.toString())
 
-const printVertex = (value) => console.log('Visited vertex: ' + value)
-breadthFirstSearch(graph, myVertices[0], printVertex)
-console.log('\n')
+// const printVertex = (value) => console.log('Visited vertex: ' + value)
+// breadthFirstSearch(graph, myVertices[0], printVertex)
+// console.log('\n')
 
 const shortesPasthA = BFS(graph, myVertices[0])
-console.log(shortesPasthA)
+// console.log(shortesPasthA)
+
+const fromVertex = myVertices[0]
+for (let i = 1; i < myVertices.length; i++) {
+    const toVertex = myVertices[i]
+    const path = new Stack()
+
+    for (let v = toVertex; v!== fromVertex; v = shortesPasthA.predecessors[v]) {
+        path.push(v)
+    }
+    path.push(fromVertex)
+
+    let s = path.pop()
+    while (!path.isEmpty()) {
+        s += ' - ' + path.pop()
+    }
+    console.log(s)
+}

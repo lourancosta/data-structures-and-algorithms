@@ -1,10 +1,9 @@
-class Stack {
+export class Stack {
     constructor() {
         this.count = 0
         this.items = {}
     }
 
-    //metodos
     push(element) {
         this.items[this.count] = element
         this.count++
@@ -182,11 +181,9 @@ function baseConverter(decNumber, base) {
     return baseString
 }
 
-console.log(baseConverter(100345, 2)); // 11000011111111001
-console.log(baseConverter(100345, 8)); // 303771
-console.log(baseConverter(100345, 16)); // 187F9
-console.log(baseConverter(100345, 35)); // 2BW0
+// console.log(baseConverter(100345, 2)); // 11000011111111001
+// console.log(baseConverter(100345, 8)); // 303771
+// console.log(baseConverter(100345, 16)); // 187F9
+// console.log(baseConverter(100345, 35)); // 2BW0
 
-
-
-console.log('\n')
+// console.log('\n')
