@@ -16,6 +16,7 @@ const initializeColor = vertices => {
     return color
 }
 
+// ---------------------------------------  BFS  ---------------------------------------
 // PERCORRENDO GRAFO
 // BFS (Breadth-First Search) -> Breadth <---->
 export const breadthFirstSearch = (graph, startVertex, callback) => {
@@ -89,7 +90,42 @@ const BFS = (graph, startVertex) => {
 
 }
 
-// GRAPH CLASS
+// ---------------------------------------  DFS  ---------------------------------------
+const depthFirstSearch = (graph, callback) => {
+    const vertices = graph.getVertices()
+    const adjList = graph.getAdjList()
+    const color = initializeColor(vertices)
+
+    for (let i = 0; i < vertices.length; i++) {
+        if (color[vertices[i]] === Colors.WHITE) {
+            depthFirstSearchVisit(vertices[i], color, adjList, callback)
+        }
+    }
+}
+
+const depthFirstSearchVisit = (u, color, adjList, callback) => {
+    color[u] = Colors.GREY
+    if (callback) {
+        callback(u)
+    }
+
+    const neighbors = adjList.get(u)
+    for (let i = 0; i < neighbors.length; i++) {
+        const w = neighbors[i]
+        if (color[w] === Colors.WHITE) {
+            depthFirstSearchVisit(w, color, adjList, callback)
+        }
+    }
+    color[u] = Colors.BLACK
+}
+
+
+
+
+
+
+
+// -----------------------------------  GRAPH CLASS  -----------------------------------
 class Graph {
     constructor(isDirected = false) {
         this.isDirected = isDirected
@@ -141,6 +177,9 @@ class Graph {
         return s
     }
 }
+
+
+// ---------------------------------------  TESTS  ---------------------------------------
 
 const graph = new Graph()
 const myVertices = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
