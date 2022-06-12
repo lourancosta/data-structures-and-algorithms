@@ -12,7 +12,6 @@ const initializeColor = vertices => {
     for (let i = 0; i < vertices.length; i ++) {
         color[vertices[i]] = Colors.WHITE
     }
-
     return color
 }
 
@@ -23,6 +22,7 @@ export const breadthFirstSearch = (graph, startVertex, callback) => {
     const adjList = graph.getAdjList()
     const color = initializeColor(vertices)
     const queue = new Queue()
+
     queue.enqueue(startVertex)
 
     while (!queue.isEmpty()) {
@@ -45,6 +45,47 @@ export const breadthFirstSearch = (graph, startVertex, callback) => {
     }
 }
 
+// BFS melhorado, caso do problema apresentando no livro sobre a distancia (em número de arestas) de v (vertice de origem) até cada vertice u
+const BFS = (graph, startVertex) => {
+    const vertices = graph.getVertices()
+    const adjList = graph.getAdjList()
+    const color = initializeColor(vertices)
+    const distances = {}
+    const predecessors = {}
+    const queue = new Queue()
+
+    queue.enqueue(startVertex)
+
+    for (let i = 0; i < vertices.length; i++) {
+        distances[vertices[i]] = 0
+        predecessors[vertices[i]] = null
+    }
+
+    while (!queue.isEmpty()) {
+        const u = queue.dequeue()
+        const neighbors = adjList.get(u)
+        color[u] = Colors.GREY
+
+        for (let i = 0; i < neighbors.length; i++) {
+            const w = neighbors[i]
+
+            if (color[w] === Colors.WHITE) {
+                color[w] = Colors.GREY
+                distances[w] = distances[u] + 1
+                predecessors[w] = u
+                queue.enqueue(w)
+            }
+        }
+
+        color[u] = Colors.BLACK
+    }
+
+    return {
+        distances,
+        predecessors
+    }
+
+}
 
 
 
@@ -125,3 +166,7 @@ console.log('\n')
 
 const printVertex = (value) => console.log('Visited vertex: ' + value)
 breadthFirstSearch(graph, myVertices[0], printVertex)
+console.log('\n')
+
+const shortesPasthA = BFS(graph, myVertices[0])
+console.log(shortesPasthA)
