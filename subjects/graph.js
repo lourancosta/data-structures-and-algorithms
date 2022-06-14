@@ -203,7 +203,7 @@ graph.addEdge('E', 'I')
 // console.log('\n')
 // console.log(graph.toString())
 
-// const printVertex = (value) => console.log('Visited vertex: ' + value)
+const printVertex = (value) => console.log('Visited vertex: ' + value)
 // breadthFirstSearch(graph, myVertices[0], printVertex)
 // console.log('\n')
 
@@ -224,5 +224,7 @@ for (let i = 1; i < myVertices.length; i++) {
     while (!path.isEmpty()) {
         s += ' - ' + path.pop()
     }
-    console.log(s)
+    //console.log(s)
 }
+
+depthFirstSearch(graph, printVertex)
