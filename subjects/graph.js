@@ -16,6 +16,7 @@ const initializeColor = vertices => {
     return color
 }
 
+
 // ---------------------------------------  BFS  ---------------------------------------
 // PERCORRENDO GRAFO
 // BFS (Breadth-First Search) -> Breadth <---->
@@ -89,6 +90,7 @@ const BFS = (graph, startVertex) => {
     }
 
 }
+
 
 // ---------------------------------------  DFS  ---------------------------------------
 const depthFirstSearch = (graph, callback) => {
@@ -166,11 +168,6 @@ const DFSVisit = (u, color, d, f, p, time, adjList) => {
 }
 
 
-
-
-
-
-
 // -----------------------------------  GRAPH CLASS  -----------------------------------
 class Graph {
     constructor(isDirected = false) {
@@ -226,7 +223,6 @@ class Graph {
 
 
 // ---------------------------------------  TESTS  ---------------------------------------
-
 const graph = new Graph()
 const myVertices = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
 
@@ -246,12 +242,10 @@ graph.addEdge('B', 'F')
 graph.addEdge('E', 'I')
 
 // console.log(graph)
-// console.log('\n')
 // console.log(graph.toString())
 
 const printVertex = (value) => console.log('Visited vertex: ' + value)
 // breadthFirstSearch(graph, myVertices[0], printVertex)
-// console.log('\n')
 
 const shortesPasthA = BFS(graph, myVertices[0])
 // console.log(shortesPasthA)
@@ -272,5 +266,133 @@ for (let i = 1; i < myVertices.length; i++) {
     }
     //console.log(s)
 }
+//depthFirstSearch(graph, printVertex)
+//console.log(DFS(graph))
 
-depthFirstSearch(graph, printVertex)
+
+// ------------------  NOVO GRAPH PARA TESTAR ORDENACAO TOPOLOGICA USANDO DFS
+const graph2 = new Graph(true)
+const myVertices2 = ['A', 'B', 'C', 'D', 'E', 'F']
+
+for (let i = 0; i < myVertices2.length; i++) {
+    graph.addVertex(myVertices2[i])
+}
+
+graph2.addEdge('A', 'C')
+graph2.addEdge('A', 'D')
+graph2.addEdge('B', 'D')
+graph2.addEdge('B', 'E')
+graph2.addEdge('C', 'F')
+graph2.addEdge('F', 'E')
+
+const result = DFS(graph2)
+const fTimes = result.finished
+let s = ''
+
+for (let count = 0; count < myVertices2.length; count++) {
+    let max = 0
+    let maxName = null
+
+    for (let i = 0; i < myVertices2.length; i ++) {
+        if (fTimes[myVertices2[i]] > max) {
+            max = fTimes[myVertices2[i]]
+            maxName = myVertices2[i] 
+        }
+    }
+    s += ' - ' + maxName
+    delete fTimes[maxName]
+}
+//console.log(s)
+
+
+// ----------------------------------  ALGORITMO DE DIJKSTRA ----------------------------------
+var graphDijkstra = [
+    [0, 2, 4, 0, 0, 0],
+    [0, 0, 1, 4, 2, 0],
+    [0, 0, 0, 0, 3, 0],
+    [0, 0, 0, 0, 0, 2],
+    [0, 0, 0, 3, 0, 2],
+    [0, 0, 0, 0, 0, 0]
+]
+
+const INF = Number.MAX_SAFE_INTEGER
+const dijkstra = (graphDijkstra, src) => {
+    const dist = []
+    const visited = []
+    const { length } = graphDijkstra
+
+    for (let i = 0; i < length; i++) {
+        dist[i] = INF
+        visited[i] = false
+    }
+    dist[src] = 0
+
+    for (let i = 0; i < length - 1; i++) {
+        const u = minDistance(dist, visited)
+        visited[u] = true
+        
+        for (let v = 0; v < length; v++) {
+            if (!visited[v] && graphDijkstra[u][v] !== 0 && dist[u] !== INF && dist[u] + graphDijkstra[u][v] < dist[v]) {
+                dist[v] = dist[u] + graphDijkstra[u][v]
+            }
+        }
+    }
+    return dist
+}
+
+const minDistance = (dist, visited) => {
+    let min = INF
+    let minIndex = -1
+
+    for (let v = 0; v < dist.length; v++) {
+        if (visited[v] === false && dist[v] <= min) {
+            min = dist[v]
+            minIndex = v
+        }
+    }
+    return minIndex
+}
+//console.log(dijkstra(graphDijkstra, 0))
+
+
+// ----------------------------------  ALGORITMO DE FLOYD-WARSHALL ----------------------------------
+var graphFW = [
+    [0, 2, 4, 0, 0, 0],
+    [0, 0, 1, 4, 2, 0],
+    [0, 0, 0, 0, 3, 0],
+    [0, 0, 0, 0, 0, 2],
+    [0, 0, 0, 3, 0, 2],
+    [0, 0, 0, 0, 0, 0]
+]
+
+const floydWarshall = graph => {
+    const dist = []
+    const { length } = graph
+
+    for (let i = 0; i < length; i++) {
+        dist[i] = []
+
+        for (let j = 0; j < length; j++) {
+            if (i === j) {
+                dist[i][j] = 0
+            } else if (!isFinite(graph[i][j])) {
+                dist[i][j] = Infinity
+            } else {
+                dist[i][j] = graph[i][j]
+            }
+        }
+    }
+
+    for (let k = 0; k < length; k++) {
+        for (let i = 0; i < length; i++) {
+            for (let j = 0; j < length; j++) {
+                if (dist[i][k] + dist[k][j] < dist[i][j]) {
+                    dist[i][j] = dist[i][k] + dist[k][j]
+                }
+            }
+        }
+    }
+
+    return dist
+}
+console.log(floydWarshall(graphFW))
