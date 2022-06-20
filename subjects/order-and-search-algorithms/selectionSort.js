@@ -24,8 +24,8 @@ function selectionSort(array, compareFn = defaultCompare) {
 
 
 // --------------------  TESTS  --------------------
-let array = createNonSortedArray(5)
-console.log(array)
+// let array = createNonSortedArray(5)
+// console.log(array)
 
-array = selectionSort(array)
-console.log(array)
+// array = selectionSort(array)
+// console.log(array)
