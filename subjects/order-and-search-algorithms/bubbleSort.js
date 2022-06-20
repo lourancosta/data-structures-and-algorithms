@@ -41,9 +41,9 @@ export function createNonSortedArray(size) {
 
 // --------------------  TESTS  --------------------
 let array = createNonSortedArray(6)
-console.log(array)
+//console.log(array)
 
 //array = bubbleSort(array)
 
 array = modifiedBublleSort(array)
-console.log(array)
+//console.log(array)
